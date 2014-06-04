@@ -69,4 +69,3 @@ Definition map {A} {B} (f : A -> B) (sa : set A) := {b:B| some a:sa, (f a = b)}.
 Lemma map_union_powerset : forall A (a : set (set A)) (b : set (set A)), a <= b -> (map Union (powerset b)) (Union a).
 firstorder.
 Save.
-
