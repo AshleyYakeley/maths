@@ -1,3 +1,5 @@
+Section Groups.
+
 Class Group {A : Type} (op : A -> A -> A) (ident : A) (inverse : A -> A) : Type :=
 {
   group_left_identity : forall x:A, op ident x = x;
@@ -7,9 +9,7 @@ Class Group {A : Type} (op : A -> A -> A) (ident : A) (inverse : A -> A) : Type 
   group_associative : forall x y z : A, op x (op y z) = op (op x y) z
 }.
 
-Check group_left_identity.
-
-Context `{G : Group A}.
+Context `{G : Group}.
 
 Lemma group_inverse_identity : inverse ident = ident.
 transitivity (op (inverse ident) ident).
@@ -48,3 +48,5 @@ rewrite group_right_inverse.
 trivial.
 assumption.
 Save.
+
+End Groups.
