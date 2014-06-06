@@ -47,32 +47,64 @@ Class Equivalence (A:Type) : Type :=
   equiv_transitive : forall a b c, (eqv a b /\ eqv b c) -> eqv a c
 }.
 
-Definition quotient {A} (E : Equivalence A) : set (set A) :=
-  {sa : set A| some a1 : sa, (sa = {a2 : A|eqv a1 a2})}.
+Definition equivalence_class {A} (E : Equivalence A) (p : A) : set A := {a : A|eqv p a}.
+
+Lemma in_equivalence_class : forall A (e : Equivalence A) (p : A), equivalence_class e p p.
+intros.
+unfold equivalence_class.
+apply equiv_reflexive.
+Save.
+
+Definition quotient {A} (e : Equivalence A) : set (set A) :=
+  {sa : set A| exists a1, (sa = equivalence_class e a1)}.
 
 Lemma quotient_disjoint : forall A (e : Equivalence A), all p1 : quotient e, all p2 : quotient e,
   (undisjoint p1 p2 -> p1 = p2).
 firstorder.
-rewrite H2.
-rewrite H3.
+rewrite H.
+rewrite H0.
 apply func_prop_ext.
-rewrite H2 in H1.
-rewrite H3 in H4.
+rewrite H in H1.
+rewrite H0 in H2.
 firstorder.
 apply (equiv_transitive x0 x x2).
 split.
 apply (equiv_transitive x0 x1 x).
 split.
-apply H4.
+apply H2.
 apply equiv_symmetric.
 apply H1.
-apply H5.
+apply H3.
 apply (equiv_transitive x x1 x2).
 split.
 apply H1.
 apply (equiv_transitive x1 x0 x2).
 split.
 apply equiv_symmetric.
-apply H4.
-apply H5.
+apply H2.
+apply H3.
+Save.
+
+Lemma quotient_Union : forall A (e : Equivalence A), is_full (Union (quotient e)).
+intros.
+unfold Union.
+unfold quotient.
+unfold is_full.
+intros.
+exists (equivalence_class e x).
+split.
+exists x.
+trivial.
+unfold equivalence_class.
+apply equiv_reflexive.
+Save.
+
+Lemma quotient_no_empty : forall A (e : Equivalence A) (s : set A), quotient e s -> not_empty s.
+unfold quotient.
+unfold not_empty.
+intros.
+destruct H.
+exists x.
+rewrite H.
+apply in_equivalence_class.
 Save.
