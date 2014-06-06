@@ -23,6 +23,12 @@ Definition superset {A} (p : set A) (q : set A) := subset q p.
 Notation "a >= b" := (superset a b).
 Definition powerset {A} (p : set A) := {x:set A|x <= p}.
 
+Definition not_empty {A} (p : set A) : Prop := exists x, p x.
+Definition is_full {A} (p : set A) : Prop := forall x, p x.
+
+Definition undisjoint {A} (a:set A) b : Prop := not_empty (intersect a b).
+Definition disjoint {A} (a:set A) b : Prop := ~ undisjoint a b.
+
 Lemma all_full : forall A (p : A), full p.
 intros.
 firstorder.
