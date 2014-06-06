@@ -12,6 +12,21 @@ surjective A -> B implies n(A) >= n(B) and n(B) > 0
 
 Definition as_big A B := exists (f : B -> A), injective f.
 
+Lemma surjective_as_big : forall A B (g : A->B), surjective g -> as_big A B.
+unfold surjective.
+unfold as_big.
+unfold injective.
+intros.
+apply choice_skolemize in H.
+destruct H.
+exists x.
+intros.
+rewrite (H a1).
+rewrite (H a2).
+rewrite H0.
+trivial.
+Save.
+
 Theorem cantor : forall A, ~ as_big A (set A).
 unfold as_big.
 intros.

@@ -20,3 +20,5 @@ apply H0.
 Save.
 
 Axiom lem : forall (p : Prop), p \/ ~p.
+
+Axiom choice_skolemize : forall A B (p: A -> B -> Prop), (forall a, exists b, p a b) -> exists f, forall a, p a (f a).
