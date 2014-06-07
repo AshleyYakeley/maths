@@ -5,6 +5,7 @@ build:
 	coqc -I `pwd` -R theory Ashley theory/Logic.v
 	coqc -I `pwd` -R theory Ashley theory/Set.v
 	coqc -I `pwd` -R theory Ashley theory/Function.v
+	coqc -I `pwd` -R theory Ashley theory/Category.v
 	coqc -I `pwd` -R theory Ashley theory/Topology.v
 	coqc -I `pwd` -R theory Ashley theory/Group.v
 clean:
