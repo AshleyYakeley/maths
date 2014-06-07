@@ -1,13 +1,32 @@
-Section Groups.
-
-Class Group {A : Type} (op : A -> A -> A) (ident : A) (inverse : A -> A) : Type :=
+Class Group {A : Type} (op : A -> A -> A): Type :=
 {
+  ident : A;
+  inverse : A -> A;
   group_left_identity : forall x:A, op ident x = x;
   group_right_identity : forall x:A, op x ident = x;
   group_left_inverse : forall x:A, op (inverse x) x = ident;
   group_right_inverse : forall x:A, op x (inverse x) = ident;
   group_associative : forall x y z : A, op x (op y z) = op (op x y) z
 }.
+
+Instance unit_group: Group (fun _ _ => tt) :=
+{
+  ident := tt;
+  inverse := fun _ => tt
+}.
+intro.
+case x.
+trivial.
+intro.
+case x.
+trivial.
+trivial.
+trivial.
+trivial.
+Qed.
+
+
+Section Properties.
 
 Context `{G : Group}.
 
@@ -49,4 +68,4 @@ trivial.
 assumption.
 Save.
 
-End Groups.
+End Properties.
