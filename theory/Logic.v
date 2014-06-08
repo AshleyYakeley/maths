@@ -18,7 +18,7 @@ Save.
 
 Lemma not_not : forall a, ~~a <-> a.
 firstorder.
-destruct (lem a).
+destruct (exclude_middle a).
 firstorder.
 firstorder.
 Save.
@@ -50,8 +50,8 @@ Save.
 Lemma equiv_not : forall p q, (~p <-> ~q) <-> (p <-> q).
 intros.
 split.
-destruct (lem p) as [Hp|Hnp].
-destruct (lem q) as [Hq|Hnq].
+destruct (exclude_middle p) as [Hp|Hnp].
+destruct (exclude_middle q) as [Hq|Hnq].
 firstorder.
 firstorder.
 firstorder.

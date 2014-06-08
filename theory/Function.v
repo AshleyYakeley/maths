@@ -17,7 +17,7 @@ unfold surjective.
 unfold as_big.
 unfold injective.
 intros.
-apply choice_skolemize in H.
+apply choice in H.
 destruct H.
 exists x.
 intros.
@@ -34,7 +34,7 @@ intro.
 destruct H as [f injf].
 unfold injective in injf.
 set (G := {a : A | exists s, (a = f s /\ ~ s a)}).
-destruct (lem (G (f G))) as [GfG|nGfG].
+destruct (exclude_middle (G (f G))) as [GfG|nGfG].
 assert (H := GfG).
 unfold G at 1 in H.
 destruct H as [s H].
@@ -78,7 +78,7 @@ Lemma quotient_disjoint : forall A (e : Equivalence A), all p1 : quotient e, all
 firstorder.
 rewrite H.
 rewrite H0.
-apply func_prop_ext.
+apply member_ext.
 rewrite H in H1.
 rewrite H0 in H2.
 firstorder.

@@ -7,7 +7,9 @@ Notation "{ x : A | P }" := (fun x : A => P).
 
 Lemma member_ext :  forall {A} a b, (forall x:A, a x <-> b x) -> a = b.
 intros.
-apply func_prop_ext.
+apply fun_ext.
+intros.
+apply prop_ext.
 apply H.
 Save.
 
@@ -36,25 +38,25 @@ Save.
 
 Lemma intersect_left_empty: forall A (p:set A), intersect empty p = empty.
 intros.
-apply func_prop_ext.
+apply member_ext.
 firstorder.
 Save.
 
 Lemma intersect_right_empty: forall A (p:set A), intersect p empty = empty.
 intros.
-apply func_prop_ext.
+apply member_ext.
 firstorder.
 Save.
 
 Lemma intersect_full_full : forall A, intersect (full:set A) full = full.
 intros.
-apply func_prop_ext.
+apply member_ext.
 firstorder.
 Save.
 
 Lemma invert_union : forall (A:Type) (p : set A) (q : set A), invert (union p q) = intersect (invert p) (invert q).
 intros.
-apply func_prop_ext.
+apply member_ext.
 firstorder.
 Save.
 
