@@ -1,5 +1,4 @@
 Require Import Ashley.Axioms.
-Require Import Ashley.Logic.
 
 Definition set (A : Type) := A -> Prop.
 

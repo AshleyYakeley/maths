@@ -2,7 +2,7 @@ default: build
 
 build:
 	coqc -I `pwd` -R theory Ashley theory/Axioms.v
-	coqc -I `pwd` -R theory Ashley theory/Logic.v
+	coqc -I `pwd` -R theory Ashley theory/Proposition.v
 	coqc -I `pwd` -R theory Ashley theory/Set.v
 	coqc -I `pwd` -R theory Ashley theory/Function.v
 	coqc -I `pwd` -R theory Ashley theory/Category.v

@@ -1,5 +1,4 @@
 Require Import Ashley.Axioms.
-Require Import Ashley.Logic.
 Require Import Ashley.Set.
 
 Definition injective {A} {B} (f : A -> B) : Prop := forall a1 a2, (f a1 = f a2 -> a1 = a2).

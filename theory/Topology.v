@@ -1,5 +1,4 @@
 Require Import Ashley.Axioms.
-Require Import Ashley.Logic.
 Require Import Ashley.Set.
 
 Class topology {A : Type} (open : set (set A)) : Type :=
