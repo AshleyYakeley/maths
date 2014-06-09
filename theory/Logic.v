@@ -17,6 +17,7 @@ Class Implication (prop:Type) `{Judge prop} : Type :=
 {
   implies: prop -> prop -> prop;
   implication: forall p q : prop, judge (implies p q) -> judge p -> judge q;
+  implies_identity: forall p: prop, judge (implies p p);
   implies_compose: forall p q r: prop, judge (implies p q) -> judge (implies q r) -> judge (implies p r)
 }.
 
@@ -24,6 +25,7 @@ Instance Prop_Implication : Implication Prop :=
 {
   implies p1 p2 := p1 -> p2
 }.
+firstorder.
 firstorder.
 firstorder.
 Defined.
@@ -69,6 +71,10 @@ Instance Ternary_Implication: Implication Ternary :=
   | False3 => False3
   end end
 }.
+firstorder.
+destruct p.
+firstorder.
+firstorder.
 firstorder.
 destruct p.
 firstorder.
