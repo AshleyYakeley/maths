@@ -1,5 +1,7 @@
 Require Import Ashley.Axioms.
 Require Import Ashley.Logic.
+Require Import Ashley.Logic.Unary.
+
 (*
 Require Import Ashley.Set.
 Require Import Ashley.Topology.
@@ -50,6 +52,7 @@ Print bool.
 
 End Test.
 
+Check true.
 
 Parameter Other : Prop.
 Axiom Tertium : ~~Other.
