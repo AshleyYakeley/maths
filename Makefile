@@ -13,6 +13,7 @@ build:
 	coqc -I `pwd` -R theory Ashley theory/Function.v
 	coqc -I `pwd` -R theory Ashley theory/SetFunction.v
 	coqc -I `pwd` -R theory Ashley theory/Topology.v
+	coqc -I `pwd` -R theory Ashley theory/Sheaf.v
 	coqc -I `pwd` -R theory Ashley theory/Group.v
 clean:
 	rm -f theory/makefile theory/*.v.d theory/*.vo theory/*.glob theory/*/*.v.d theory/*/*.vo theory/*/*.glob

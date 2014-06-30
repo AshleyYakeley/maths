@@ -22,7 +22,7 @@ trivial.
 intros.
 apply fun_ext.
 trivial.
-Qed.
+Defined.
 
 Instance type_category : Category Type (fun a b => a -> b) :=
 {
@@ -37,7 +37,7 @@ trivial.
 intros.
 apply fun_ext.
 trivial.
-Qed.
+Defined.
 
 Instance opposite_category {obj} {m} (cat : Category obj m) : Category obj (fun a b => m b a) :=
 {
@@ -50,7 +50,7 @@ intros.
 apply compose_right_id.
 intros.
 apply compose_left_id.
-Qed.
+Defined.
 
 Class Functor {OA} {MA} {OB} {MB} (CatA : Category OA MA) (CatB : Category OB MB) :=
 {
@@ -58,4 +58,41 @@ Class Functor {OA} {MA} {OB} {MB} (CatA : Category OA MA) (CatB : Category OB MB
   mapM: forall {o1 o2 : OA}, MA o1 o2 -> MB (mapO o1) (mapO o2);
   mapsIdentity: forall {o : OA}, mapM (id : MA o o) = (id : MB (mapO o) (mapO o));
   mapsCompose: forall {o1 o2 o3: OA} {m1 : MA o2 o3} {m2 : MA o1 o2}, mapM (compose m1 m2) = compose (mapM m1) (mapM m2)
+}.
+
+Class ContraFunctor {OA} {MA} {OB} {MB} (CatA : Category OA MA) (CatB : Category OB MB) :=
+{
+  comapO: OA -> OB;
+  comapM: forall (o1 o2 : OA), MA o1 o2 -> MB (comapO o2) (comapO o1);
+  comapsIdentity: forall {o : OA}, comapM o o (id : MA o o) = (id : MB (comapO o) (comapO o));
+  comapsCompose: forall {o1 o2 o3: OA} {m1 : MA o2 o3} {m2 : MA o1 o2}, comapM o1 o3 (compose m1 m2) = compose (comapM o1 o2 m2) (comapM o2 o3 m1)
+}.
+
+Record AnyCategory : Type := MkAnyCategory
+{
+  acObj : Type;
+  acM : acObj -> acObj -> Type;
+  acCat : Category acObj acM
+}.
+
+Record AnyFunctor (A : AnyCategory) (B : AnyCategory) : Type := MkAnyFunctor
+{
+  afFunctor : Functor (acCat A) (acCat B)
+}.
+
+Instance identity_functor {O} {M} {Cat : Category O M} : Functor Cat Cat :=
+{
+  mapO o := o;
+  mapM o1 o2 m := m
+}.
+intros. trivial.
+intros. trivial.
+Defined.
+
+Instance compose_functor {O1} {M1} {Cat1 : Category O1 M1} 
+
+Instance category_category : Category AnyCategory AnyFunctor :=
+{
+  id A := MkAnyFunctor A A identity_functor
+  compose 
 }.

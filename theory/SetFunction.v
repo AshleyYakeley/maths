@@ -2,13 +2,14 @@ Require Import Ashley.Axioms.
 Require Import Ashley.Set.
 Require Import Ashley.Category.
 
-Record sval {A : Type} (sa : set A) : Type := Build_sval
+(* stype takes a set and turns it into a type *)
+Record stype {A : Type} (sa : set A) : Type := sval
 {
   val : A;
   ins : sa val
 }.
 
-Definition sfun {A} {B} (sa:set A) (sb:set B) := sval sa -> sval sb.
+Definition sfun {A} {B} (sa:set A) (sb:set B) := stype sa -> stype sb.
 
 Instance subset_category A : Category (set A) sfun :=
 {
@@ -24,9 +25,9 @@ trivial.
 intros.
 apply fun_ext.
 trivial.
-Qed.
+Defined.
 
-Lemma not_in_empty : forall A, forall a : sval (empty : set A), False.
+Lemma not_in_empty : forall A, forall a : stype (empty : set A), False.
 firstorder.
 Qed.
 
@@ -38,7 +39,7 @@ apply H0.
 apply H1.
 Qed.
 
-Instance inclusion_category {A} (open : set (set A)) : Category (sval open) (fun sv1 sv2 => (val open sv1) <= (val open sv2)) :=
+Instance inclusion_category {A} (open : set (set A)) : Category (stype open) (fun sv1 sv2 => (val open sv1) <= (val open sv2)) :=
 {
   id P Q := fun x => x;
   compose P Q R := subset_transitive
@@ -49,4 +50,4 @@ intros.
 apply proof_irrelevance.
 intros.
 apply proof_irrelevance.
-Qed.
+Defined.

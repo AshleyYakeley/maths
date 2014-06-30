@@ -6,8 +6,52 @@ Class topology {A : Type} (open : set (set A)) : Type :=
   top_empty : open empty;
   top_full : open full;
   top_intersect : all a:open, all b:open, open (intersect a b);
-  top_union : forall ff, ff <= open -> open (Union ff)
+  top_Union : forall ff, ff <= open -> open (Union ff)
 }.
+
+Lemma top_union: forall {A} {open:set (set A)} `{topology A open} (u v:set A), open u -> open v -> open (union u v).
+intros.
+set (ff:={a:set A|a=u \/ a=v}).
+cut (union u v = Union ff).
+intros.
+rewrite H2.
+apply top_Union.
+unfold ff.
+unfold subset.
+intros.
+destruct H3.
+destruct H3.
+apply H0.
+rewrite H3.
+apply H1.
+unfold Union.
+unfold union.
+apply member_ext.
+unfold ff.
+split.
+intros.
+destruct H2.
+exists u.
+split.
+left.
+trivial.
+apply H2.
+exists v.
+split.
+right.
+trivial.
+apply H2.
+intros.
+destruct H2.
+destruct H2.
+destruct H2.
+left.
+rewrite <- H2.
+apply H3.
+right.
+rewrite <- H2.
+apply H3.
+Qed.
 
 Instance discrete {A : Type} : topology (full : set (set A)) :=  {}.
 apply all_full.
