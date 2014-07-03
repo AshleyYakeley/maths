@@ -68,6 +68,25 @@ Class ContraFunctor {OA} {MA} {OB} {MB} (CatA : Category OA MA) (CatB : Category
   comapsCompose: forall {o1 o2 o3: OA} {m1 : MA o2 o3} {m2 : MA o1 o2}, comapM o1 o3 (compose m1 m2) = compose (comapM o1 o2 m2) (comapM o2 o3 m1)
 }.
 
+Instance identity_functor {O} {M} {Cat : Category O M} : Functor Cat Cat :=
+{
+  mapO o := o;
+  mapM o1 o2 m := m
+}.
+intros. trivial.
+intros. trivial.
+Defined.
+
+Instance compose_functor {O1} {M1} {Cat1 : Category O1 M1} {O2} {M2} {Cat2 : Category O2 M2} {O3} {M3} {Cat3 : Category O3 M3}
+ (F23 : Functor Cat2 Cat3) (F12 : Functor Cat1 Cat2) : Functor Cat1 Cat3 :=
+{
+  mapO o1 := mapO (mapO o1 : O2);
+  mapM oa ob m1 := mapM (mapM m1 : M2 (mapO oa) (mapO ob))
+}.
+intros. rewrite mapsIdentity. rewrite mapsIdentity. trivial.
+intros. rewrite mapsCompose. rewrite mapsCompose. trivial.
+Defined.
+
 Record AnyCategory : Type := MkAnyCategory
 {
   acObj : Type;
@@ -80,19 +99,12 @@ Record AnyFunctor (A : AnyCategory) (B : AnyCategory) : Type := MkAnyFunctor
   afFunctor : Functor (acCat A) (acCat B)
 }.
 
-Instance identity_functor {O} {M} {Cat : Category O M} : Functor Cat Cat :=
-{
-  mapO o := o;
-  mapM o1 o2 m := m
-}.
-intros. trivial.
-intros. trivial.
-Defined.
-
-Instance compose_functor {O1} {M1} {Cat1 : Category O1 M1} 
-
 Instance category_category : Category AnyCategory AnyFunctor :=
 {
-  id A := MkAnyFunctor A A identity_functor
-  compose 
+  id A := MkAnyFunctor A A identity_functor;
+  compose A B C mbc mab := MkAnyFunctor A C (compose_functor (afFunctor B C mbc) (afFunctor A B mab))
 }.
+intros. (* unfold afFunctor. unfold compose_functor. intros. *)
+
+
+Defined.
