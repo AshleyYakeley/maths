@@ -94,17 +94,14 @@ Record AnyCategory : Type := MkAnyCategory
   acCat : Category acObj acM
 }.
 
-Record AnyFunctor (A : AnyCategory) (B : AnyCategory) : Type := MkAnyFunctor
-{
-  afFunctor : Functor (acCat A) (acCat B)
-}.
+Definition AnyFunctor (A : AnyCategory) (B : AnyCategory) : Type := Functor (acCat A) (acCat B).
 
 Instance category_category : Category AnyCategory AnyFunctor :=
 {
-  id A := MkAnyFunctor A A identity_functor;
-  compose A B C mbc mab := MkAnyFunctor A C (compose_functor (afFunctor B C mbc) (afFunctor A B mab))
+  id A := identity_functor;
+  compose A B C mbc mab := compose_functor mbc mab
 }.
-intros. (* unfold afFunctor. unfold compose_functor. intros. *)
+intros. unfold compose_functor.
 
 
 Defined.
