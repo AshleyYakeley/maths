@@ -102,6 +102,10 @@ Instance category_category : Category AnyCategory AnyFunctor :=
   compose A B C mbc mab := compose_functor mbc mab
 }.
 intros. unfold compose_functor.
+f_equal (* slow! *).
+apply proof_irrelevance.
+apply proof_irrelevance.
+intros. unfold compose_functor. unfold identity_functor.
 
 
 Defined.
