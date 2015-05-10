@@ -1,69 +1,104 @@
-Class Group {A : Type} (op : A -> A -> A): Type :=
+Class Semigroup (A: Type): Type :=
+{
+  op: A -> A -> A;
+  associative : forall x y z : A, op x (op y z) = op (op x y) z
+}.
+
+Class Monoid (A: Type) `{Semigroup A}: Type :=
 {
   ident : A;
-  inverse : A -> A;
-  group_left_identity : forall x:A, op ident x = x;
-  group_right_identity : forall x:A, op x ident = x;
-  group_left_inverse : forall x:A, op (inverse x) x = ident;
-  group_right_inverse : forall x:A, op x (inverse x) = ident;
-  group_associative : forall x y z : A, op x (op y z) = op (op x y) z
+  left_identity : forall x:A, op ident x = x;
+  right_identity : forall x:A, op x ident = x
 }.
 
-Instance unit_group: Group (fun _ _ => tt) :=
+Class Group (A: Type) `{Monoid A}: Type :=
 {
-  ident := tt;
+  inverse : A -> A;
+  left_inverse : forall x:A, op (inverse x) x = ident;
+  right_inverse : forall x:A, op x (inverse x) = ident
+}.
+
+Instance unit_Semigroup: Semigroup unit :=
+{
+  op := fun _ _ => tt
+}.
+intros.
+trivial.
+Defined.
+
+Instance unit_Monoid: Monoid unit :=
+{
+  ident := tt
+}.
+intros.
+destruct x.
+unfold op.
+unfold unit_Semigroup.
+trivial.
+intros.
+unfold op.
+unfold unit_Semigroup.
+destruct x.
+trivial.
+Defined.
+
+Instance unit_Group: Group unit :=
+{
   inverse := fun _ => tt
 }.
-intro.
-case x.
+intros.
+destruct x.
+unfold op.
+unfold ident.
+unfold unit_Semigroup.
+unfold unit_Monoid.
 trivial.
-intro.
-case x.
+intros.
+unfold op.
+unfold ident.
+unfold unit_Semigroup.
+unfold unit_Monoid.
 trivial.
-trivial.
-trivial.
-trivial.
-Qed.
-
+Defined.
 
 Section Properties.
 
 Context `{G : Group}.
 
-Lemma group_inverse_identity : inverse ident = ident.
+Lemma inverse_identity : inverse ident = ident.
 transitivity (op (inverse ident) ident).
 symmetry.
-rewrite group_right_identity.
+rewrite right_identity.
 trivial.
-rewrite group_left_inverse.
+rewrite left_inverse.
 trivial.
 Save.
 
-Lemma group_inverse_inverse : forall x:A, inverse (inverse x) = x.
+Lemma inverse_inverse : forall x:A, inverse (inverse x) = x.
 intro.
 transitivity (op (inverse (inverse x)) (op (inverse x) x)).
-rewrite group_left_inverse.
-rewrite group_right_identity.
+rewrite left_inverse.
+rewrite right_identity.
 trivial.
-rewrite group_associative.
-rewrite group_left_inverse.
-rewrite group_left_identity.
-trivial.
-Save.
-
-Lemma group_unique_unop : forall x y z:A, op x y = z -> x = op z (inverse y).
-intros.
-rewrite <- H.
-rewrite <- group_associative.
-rewrite group_right_inverse.
-rewrite group_right_identity.
+rewrite associative.
+rewrite left_inverse.
+rewrite left_identity.
 trivial.
 Save.
 
-Lemma group_unique_identity : forall x i:A, op i x = x -> i = ident.
+Lemma unique_unop : forall x y z:A, op x y = z -> x = op z (inverse y).
 intros.
-rewrite (group_unique_unop i x x).
-rewrite group_right_inverse.
+rewrite <- H1.
+rewrite <- associative.
+rewrite right_inverse.
+rewrite right_identity.
+trivial.
+Save.
+
+Lemma unique_identity : forall x i:A, op i x = x -> i = ident.
+intros.
+rewrite (unique_unop i x x).
+rewrite right_inverse.
 trivial.
 assumption.
 Save.
