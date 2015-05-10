@@ -27,8 +27,9 @@ Definition notL {prop} `{Implication prop} `{HasFalse prop} (p:prop) : prop := i
 
 Require Import Ashley.Category.
 
-Instance Logic_Category (prop:Type) `{Implication prop}: Category prop (fun a b => judge (implies a b)) :=
+Instance Logic_Category (prop:Type) `{Implication prop}: Category prop :=
 {
+  hom a b := judge (implies a b);
   id A := implies_identity;
   compose A B C x y := implies_compose y x
 }.

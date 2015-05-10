@@ -58,6 +58,20 @@ firstorder.
 firstorder.
 Save.
 
+Lemma prop_true_or_false: forall (p : Prop), (p = True) \/ (p = False).
+intros.
+apply (imply_or_left p).
+split.
+intros.
+apply prop_ext.
+firstorder.
+apply (imply_or_right (~ p)).
+split.
+intros.
+apply prop_ext.
+firstorder.
+apply exclude_middle.
+Save.
 
 Lemma exists_not : forall A (p:A -> Prop), (exists b : A, ~ p b) -> ~ (forall a : A, p a).
 firstorder.

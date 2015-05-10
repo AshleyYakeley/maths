@@ -1,16 +1,22 @@
 Require Import Ashley.Axioms.
 
-Class Category (Obj : Type) (M : Obj -> Obj -> Type): Type :=
+Class Category (Obj: Type): Type :=
 {
-  id: forall {a:Obj}, M a a;
-  compose: forall {a:Obj} {b:Obj} {c:Obj}, M b c -> M a b -> M a c;
-  compose_assoc: forall {a:Obj} {b:Obj} {c:Obj} {d:Obj} {x:M c d} {y:M b c} {z:M a b},  compose x (compose y z) = compose (compose x y) z;
-  compose_left_id: forall {a:Obj} {b:Obj} {x : M a b}, compose id x = x;
-  compose_right_id: forall {a:Obj} {b:Obj} {x : M a b}, compose x id = x
+  hom: Obj -> Obj -> Type;
+  id: forall {a:Obj}, hom a a;
+  compose: forall {a:Obj} {b:Obj} {c:Obj}, hom b c -> hom a b -> hom a c;
+  compose_assoc: forall {a:Obj} {b:Obj} {c:Obj} {d:Obj} {x:hom c d} {y:hom b c} {z:hom a b},  compose x (compose y z) = compose (compose x y) z;
+  compose_left_id: forall {a:Obj} {b:Obj} {x : hom a b}, compose id x = x;
+  compose_right_id: forall {a:Obj} {b:Obj} {x : hom a b}, compose x id = x
 }.
+Definition objOf {Obj: Type} (cat: Category Obj) := Obj.
+Definition homOf `(cat: Category) := @hom _ cat.
+Definition idOf `(cat: Category) := @id _ cat.
+Definition composeOf `(cat: Category) {a: objOf cat} {b: objOf cat} {c: objOf cat} := @compose _ cat a b c.
 
-Instance prop_category : Category Prop (fun a b => a -> b) :=
+Instance prop_category: Category Prop :=
 {
+  hom a b := a -> b;
   id A := (fun p => p);
   compose A B C mbc mab a := mbc (mab a)
 }.
@@ -24,8 +30,9 @@ apply fun_ext.
 trivial.
 Defined.
 
-Instance type_category : Category Type (fun a b => a -> b) :=
+Instance type_category: Category Type :=
 {
+  hom a b := a -> b;
   id A := (fun p => p);
   compose A B C mbc mab a := mbc (mab a)
 }.
@@ -39,10 +46,11 @@ apply fun_ext.
 trivial.
 Defined.
 
-Instance opposite_category {obj} {m} (cat : Category obj m) : Category obj (fun a b => m b a) :=
+Instance opposite_category `(cat: Category): Category (objOf cat) :=
 {
-  id A := id : m A A;
-  compose A B C mcb mba := (compose (mba : m B A) (mcb : m C B) : m C A)
+  hom a b := homOf cat b a;
+  id a := idOf cat a;
+  compose a b c cb ba := (composeOf cat ba cb)
 }.
 intros.
 rewrite compose_assoc. trivial.
@@ -52,60 +60,46 @@ intros.
 apply compose_left_id.
 Defined.
 
-Class Functor {OA} {MA} {OB} {MB} (CatA : Category OA MA) (CatB : Category OB MB) :=
+Class Functor `(A: Category) `(B: Category) :=
 {
-  mapO: OA -> OB;
-  mapM: forall {o1 o2 : OA}, MA o1 o2 -> MB (mapO o1) (mapO o2);
-  mapsIdentity: forall {o : OA}, mapM (id : MA o o) = (id : MB (mapO o) (mapO o));
-  mapsCompose: forall {o1 o2 o3: OA} {m1 : MA o2 o3} {m2 : MA o1 o2}, mapM (compose m1 m2) = compose (mapM m1) (mapM m2)
+  mapObj: objOf A -> objOf B;
+  mapHom: forall {o1 o2}, homOf A o1 o2 -> homOf B (mapObj o1) (mapObj o2);
+  mapsIdentity: forall o, mapHom (idOf A o) = idOf B (mapObj o);
+  mapsCompose: forall o1 o2 o3 (m1 : homOf A o2 o3) (m2 : homOf A o1 o2), mapHom (composeOf A m1 m2) = composeOf B (mapHom m1) (mapHom m2)
+}.
+Definition functor_source `{A: Category} `{B: Category} (f: Functor A B) := A.
+Definition functor_dest `{A: Category} `{B: Category} (f: Functor A B) := B.
+Definition functor_mapObj `(f: Functor) := @mapObj _ _ _ _ f.
+Definition functor_mapHom `(f: Functor) {o1 o2} := @mapHom _ _ _ _ f o1 o2.
+
+Class ContraFunctor `(A: Category) `(B: Category) :=
+{
+  comapObj: objOf A -> objOf B;
+  comapHom: forall {o1 o2}, homOf A o1 o2 -> homOf B (comapObj o2) (comapObj o1);
+  comapsIdentity: forall o, comapHom (idOf A o) = idOf B (comapObj o);
+  comapsCompose: forall o1 o2 o3 (m1 : homOf A o2 o3) (m2 : homOf A o1 o2), comapHom (composeOf A m1 m2) = composeOf B (comapHom m2) (comapHom m1)
 }.
 
-Class ContraFunctor {OA} {MA} {OB} {MB} (CatA : Category OA MA) (CatB : Category OB MB) :=
-{
-  comapO: OA -> OB;
-  comapM: forall (o1 o2 : OA), MA o1 o2 -> MB (comapO o2) (comapO o1);
-  comapsIdentity: forall {o : OA}, comapM o o (id : MA o o) = (id : MB (comapO o) (comapO o));
-  comapsCompose: forall {o1 o2 o3: OA} {m1 : MA o2 o3} {m2 : MA o1 o2}, comapM o1 o3 (compose m1 m2) = compose (comapM o1 o2 m2) (comapM o2 o3 m1)
-}.
+Definition contrafunctor_source `{A: Category} `{B: Category} (f: ContraFunctor A B) := A.
+Definition contrafunctor_dest `{A: Category} `{B: Category} (f: ContraFunctor A B) := B.
+Definition contrafunctor_comapObj `(f: ContraFunctor) := @comapObj _ _ _ _ f.
+Definition contrafunctor_comapHom `(f: ContraFunctor) {o1 o2} := @comapHom _ _ _ _ f o1 o2.
 
-Instance identity_functor {O} {M} {Cat : Category O M} : Functor Cat Cat :=
+Instance identity_functor `(Cat : Category) : Functor Cat Cat :=
 {
-  mapO o := o;
-  mapM o1 o2 m := m
+  mapObj o := o;
+  mapHom o1 o2 m := m
 }.
 intros. trivial.
 intros. trivial.
 Defined.
 
-Instance compose_functor {O1} {M1} {Cat1 : Category O1 M1} {O2} {M2} {Cat2 : Category O2 M2} {O3} {M3} {Cat3 : Category O3 M3}
+Instance compose_functor `{Cat1 : Category} `{Cat2 : Category} `{Cat3 : Category}
  (F23 : Functor Cat2 Cat3) (F12 : Functor Cat1 Cat2) : Functor Cat1 Cat3 :=
 {
-  mapO o1 := mapO (mapO o1 : O2);
-  mapM oa ob m1 := mapM (mapM m1 : M2 (mapO oa) (mapO ob))
+  mapObj o1 := functor_mapObj F23 (functor_mapObj F12 o1);
+  mapHom oa ob m1 := functor_mapHom F23 (functor_mapHom F12 m1)
 }.
-intros. rewrite mapsIdentity. rewrite mapsIdentity. trivial.
-intros. rewrite mapsCompose. rewrite mapsCompose. trivial.
-Defined.
-
-Record AnyCategory : Type := MkAnyCategory
-{
-  acObj : Type;
-  acM : acObj -> acObj -> Type;
-  acCat : Category acObj acM
-}.
-
-Definition AnyFunctor (A : AnyCategory) (B : AnyCategory) : Type := Functor (acCat A) (acCat B).
-
-Instance category_category : Category AnyCategory AnyFunctor :=
-{
-  id A := identity_functor;
-  compose A B C mbc mab := compose_functor mbc mab
-}.
-intros. unfold compose_functor.
-f_equal (* slow! *).
-apply proof_irrelevance.
-apply proof_irrelevance.
-intros. unfold compose_functor. unfold identity_functor.
-
-
+intros. unfold functor_mapHom. rewrite mapsIdentity. rewrite mapsIdentity. trivial.
+intros. unfold functor_mapHom. rewrite mapsCompose. rewrite mapsCompose. trivial.
 Defined.
