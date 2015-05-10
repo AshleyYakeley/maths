@@ -300,7 +300,7 @@ intros.
 destruct H.
 destruct H.
 rewrite <- H0.
-apply is_val.
+apply struct.
 Defined.
 
 Instance open_SemicompleteBoundedLattice `(t: Topology) : SemicompleteBoundedLattice (open_type t) :=

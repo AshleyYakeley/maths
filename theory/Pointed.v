@@ -49,25 +49,11 @@ Instance pointed_Category: Category Pointed:=
 }.
 *)
 
-
 Definition PointedMap1 (A B: Pointed) := set_type (fun (f: @pSet A -> @pSet B) => f (@point A) = (@point B)).
-
-Definition stc' : forall {A:Type} {s:A -> Type} (x:A), s x -> set_type s.
-intros.
-apply (stc s x X).
-Defined.
-
 
 Definition identity_PointedMap1 (p: Pointed): PointedMap1 p p.
 apply (stc' (fun x => x)).
 trivial.
-Defined.
-
-
-Definition struct {A} {s:A -> Type} (st:set_type s): s (val st).
-unfold val.
-destruct st.
-exact s0.
 Defined.
 
 Definition compose_PointedMap1 (p1 p2 p3: Pointed):

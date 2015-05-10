@@ -13,9 +13,14 @@ destruct sv.
 exact x.
 Defined.
 
-Lemma is_val: forall {A} (s: A -> Type) (sv:set_type s), s (val sv).
+Definition stc' : forall {A:Type} {s:A -> Type} (x:A), s x -> set_type s.
+intros.
+apply (stc s x X).
+Defined.
+
+Definition struct {A} {s:A -> Type} (st:set_type s): s (val st).
 unfold val.
-destruct sv.
+destruct st.
 exact s0.
 Defined.
 
@@ -40,14 +45,14 @@ apply proof_irrelevance.
 Qed.
 
 Lemma exist_ext: forall {A} (s: A -> Type) (p q: set_type s) (proof: val p = val q),
-  ((converter proof (is_val s p)) = is_val s q) -> p = q.
+  ((converter proof (struct p)) = struct q) -> p = q.
 intros.
 destruct p.
 destruct q.
 unfold val in proof.
 subst x.
 unfold converter in H.
-unfold is_val in H.
+unfold struct in H.
 unfold val in H.
 unfold eq_rect in H.
 rewrite H.
