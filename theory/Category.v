@@ -104,3 +104,21 @@ intros. unfold functor_mapHom. rewrite mapsIdentity. rewrite mapsIdentity. trivi
 intros. unfold functor_mapHom. rewrite mapsCompose. rewrite mapsCompose. trivial.
 Defined.
 
+Class InitialCategory (T:Type) `{Category T}:=
+{
+  initial: T;
+  initial_m: forall {A:T}, hom initial A;
+  initial_m_unique: forall {A:T} (m: hom initial A), m = initial_m
+}.
+
+Class FinalCategory (T:Type) `{Category T}:=
+{
+  final: T;
+  final_m: forall {A:T}, hom A final;
+  final_m_unique: forall {A:T} (m: hom A final), m = final_m
+}.
+
+Class ZeroCategory (T:Type) `{InitialCategory T} `{FinalCategory T}:=
+{
+  initial_is_final: initial = final
+}.
