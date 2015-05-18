@@ -14,6 +14,7 @@ build:
 	coqc -I `pwd` -R theory Ashley theory/Lattice.v
 	coqc -I `pwd` -R theory Ashley theory/BoundedLattice.v
 	coqc -I `pwd` -R theory Ashley theory/Function.v
+	coqc -I `pwd` -R theory Ashley theory/Cardinality.v
 	coqc -I `pwd` -R theory Ashley theory/SetFunction.v
 	coqc -I `pwd` -R theory Ashley theory/Equivalence.v
 	coqc -I `pwd` -R theory Ashley theory/Pointed.v

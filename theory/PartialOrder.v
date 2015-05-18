@@ -9,6 +9,8 @@ Class Preorder (A:Type) :=
 }.
 Notation "a >= b" := (within b a).
 Notation "a <= b" := (within a b).
+Notation "a > b" := (~ within a b).
+Notation "a < b" := (~ within b a).
 
 Instance indexed_Preorder (I:Type) (A:Type) `{Preorder A} : Preorder (I -> A) :=
 {
