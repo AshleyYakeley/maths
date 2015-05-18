@@ -18,6 +18,11 @@ intros.
 apply (stc s x X).
 Defined.
 
+Lemma val_stc: forall {A:Type} (s:A -> Type) (v:A) (st:s v), val (stc s v st) = v.
+unfold val.
+trivial.
+Qed.
+
 Definition struct {A} {s:A -> Type} (st:set_type s): s (val st).
 unfold val.
 destruct st.
@@ -64,6 +69,15 @@ intros.
 apply (exist_ext s p q H).
 apply proof_irrelevance.
 Defined.
+
+Lemma set_type_ext_eq: forall {A} (s: A -> Prop) (p q: set_type s), (val p = val q) = (p = q).
+intros.
+apply prop_ext. split.
+apply set_type_ext.
+intros.
+rewrite H.
+trivial.
+Qed.
 
 
 Variable Te : Type.
@@ -114,24 +128,29 @@ intro.
 apply within_trans.
 Qed.
 
-Instance inclusion_PartialOrder {A} (open : set (set A)) : PartialOrder (set_type open) :=
+Instance inclusion_Preorder {A} (open : set (set A)) : Preorder (set_type open) :=
 {
   within sv1 sv2 := (val sv1) <= (val sv2)
 }.
 intros.
 apply within_reflex.
 intros.
-apply set_type_ext.
-apply within_antisym.
-exact H.
-exact H0.
-intros.
 apply (within_trans (val p) (val q) (val r)).
 exact H.
 exact H0.
 Defined.
 
+Instance inclusion_PartialOrder {A} (open : set (set A)) : PartialOrder (set_type open) :=
+{
+}.
+intros.
+apply set_type_ext.
+apply within_antisym.
+exact H.
+exact H0.
+Defined.
+
 Definition inclusion_category {A} (open : set (set A)) : Category (set_type open) :=
-  PartialOrder_Category (inclusion_PartialOrder open).
+  Preorder_Category (inclusion_Preorder open).
 
 Definition subset_type {A} (s : set A) : Type := set_type (superset s).

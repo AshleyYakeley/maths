@@ -73,8 +73,8 @@ intros.
 apply within_antisym.
 apply Join_least.
 intros.
-unfold empty in H5.
-contradiction H5.
+unfold empty in H6.
+contradiction H6.
 apply bottom_within.
 Qed.
 
@@ -84,7 +84,7 @@ apply within_antisym.
 apply Join_least.
 unfold singleton.
 intros.
-rewrite H5.
+rewrite H6.
 apply within_reflex.
 apply Join_bound.
 unfold singleton.
@@ -97,9 +97,9 @@ apply within_antisym.
 apply Join_least.
 unfold union.
 intros.
-destruct H5.
-apply join_left. apply Join_bound. exact H5.
-apply join_right. apply Join_bound. exact H5.
+destruct H6.
+apply join_left. apply Join_bound. exact H6.
+apply join_right. apply Join_bound. exact H6.
 apply join_least.
 split.
 apply Join_least.
@@ -107,13 +107,13 @@ intros.
 apply Join_bound.
 unfold union.
 left.
-exact H5.
+exact H6.
 apply Join_least.
 intros.
 apply Join_bound.
 unfold union.
 right.
-exact H5.
+exact H6.
 Qed.
 
 Instance indexed_SemicompleteBoundedLattice (I:Type) (A:Type) `{SemicompleteBoundedLattice A} : SemicompleteBoundedLattice (I -> A) :=
@@ -123,26 +123,26 @@ Instance indexed_SemicompleteBoundedLattice (I:Type) (A:Type) `{SemicompleteBoun
 intros.
 unfold map.
 unfold within.
-unfold indexed_PartialOrder.
+unfold indexed_Preorder.
 intros.
 apply Join_bound.
 exists a.
 split.
-exact H5.
+exact H6.
 trivial.
 intros.
 unfold map.
 unfold within.
-unfold indexed_PartialOrder.
+unfold indexed_Preorder.
 intros.
 apply Join_least.
 intros.
-destruct H6.
-destruct H6.
-rewrite <- H7.
-unfold within in H5.
-unfold indexed_PartialOrder in H5.
-exact (H5 x H6 i).
+destruct H7.
+destruct H7.
+rewrite <- H8.
+unfold within in H6.
+unfold indexed_PartialOrder in H6.
+exact (H6 x H7 i).
 Defined.
 
 
@@ -162,12 +162,12 @@ Instance prop_SemicompleteBoundedLattice: SemicompleteBoundedLattice Prop :=
 {
   Join f := f True
 }.
-unfold within. unfold prop_PartialOrder.
+unfold within. unfold prop_Preorder.
 intros.
 rewrite <- (isTrue H0).
 exact H.
 
-unfold within. unfold prop_PartialOrder.
+unfold within. unfold prop_Preorder.
 intros.
 apply (H True).
 exact H0.

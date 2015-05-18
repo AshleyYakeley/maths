@@ -57,10 +57,10 @@ rewrite join_within.
 apply prop_ext.
 split.
 intro.
-rewrite <- H3.
+rewrite <- H4.
 apply meet_join_absorbs.
 intro.
-rewrite <- H3.
+rewrite <- H4.
 rewrite join_commutes.
 rewrite meet_commutes.
 apply join_meet_absorbs.
@@ -68,32 +68,32 @@ Qed.
 
 Lemma join_least: forall `{Lattice} p q r, (p <= r) /\ (q <= r) -> (join p q <= r).
 intros.
-destruct H3.
+destruct H4.
 rewrite join_within.
 rewrite <- join_associates.
-rewrite join_within in H3.
 rewrite join_within in H4.
-rewrite H4.
-exact H3.
+rewrite join_within in H5.
+rewrite H5.
+exact H4.
 Qed.
 
 Lemma meet_least: forall `{Lattice} p q r, (r <= p) /\ (r <= q) -> (r <= meet p q).
 intros.
-destruct H3.
+destruct H4.
 rewrite meet_within.
 rewrite meet_associates.
-rewrite meet_within in H3.
 rewrite meet_within in H4.
-rewrite H3.
-exact H4.
+rewrite meet_within in H5.
+rewrite H4.
+exact H5.
 Qed.
 
 Lemma join_left: forall `{Lattice} p q r, (r <= p) -> (r <= join p q).
 intros.
 rewrite join_within.
-rewrite join_within in H3.
+rewrite join_within in H4.
 rewrite join_associates.
-rewrite H3.
+rewrite H4.
 trivial.
 Qed.
 
@@ -101,7 +101,7 @@ Lemma join_right: forall `{Lattice} p q r, (r <= q) -> (r <= join p q).
 intros.
 rewrite join_commutes.
 apply join_left.
-exact H3.
+exact H4.
 Qed.
 
 
@@ -148,17 +148,17 @@ intros.
 unfold join.
 unfold indexed_JoinSemilattice.
 unfold within.
-unfold indexed_PartialOrder.
+unfold indexed_Preorder.
 apply prop_ext.
 split.
 intros.
 apply fun_ext.
 intros.
 rewrite <- join_within.
-apply H3.
+apply H4.
 intros.
 rewrite join_within.
-rewrite <- H3.
+rewrite <- H4.
 rewrite join_associates.
 rewrite join_idem.
 trivial.

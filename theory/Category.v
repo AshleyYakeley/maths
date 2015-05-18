@@ -103,3 +103,4 @@ Instance compose_functor `{Cat1 : Category} `{Cat2 : Category} `{Cat3 : Category
 intros. unfold functor_mapHom. rewrite mapsIdentity. rewrite mapsIdentity. trivial.
 intros. unfold functor_mapHom. rewrite mapsCompose. rewrite mapsCompose. trivial.
 Defined.
+

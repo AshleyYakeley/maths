@@ -32,8 +32,8 @@ unfold prop_JoinSemilattice.
 fold (union x0 x).
 rewrite <- Union2.
 apply top_Union_is_open.
-unfold within. unfold indexed_PartialOrder.
-unfold within. unfold prop_PartialOrder.
+unfold within. unfold indexed_Preorder.
+unfold within. unfold prop_Preorder.
 intros.
 destruct H.
 rewrite H.
@@ -112,33 +112,28 @@ intros.
 apply meet_idem.
 Defined.
 
-Instance open_PartialOrder `(top: Topology) : PartialOrder (open_type top) :=
+Instance open_Preorder `(top: Topology) : Preorder (open_type top) :=
 {
   within a b := within (val a) (val b)
 }.
-unfold within. unfold indexed_PartialOrder.
-unfold within. unfold prop_PartialOrder.
-firstorder.
-unfold within. unfold indexed_PartialOrder.
-unfold within. unfold prop_PartialOrder.
 intros.
-apply set_type_ext.
-apply member_ext.
+apply within_reflex.
 intros.
-split.
-intro.
-apply (H x).
-exact H1.
-intro.
-apply (H0 x).
-exact H1.
-unfold within. unfold indexed_PartialOrder.
-unfold within. unfold prop_PartialOrder.
-intros.
-apply (H i).
-apply (H0 i).
-exact H1.
+apply (within_trans (val p) (val q) (val r)).
+exact H.
+exact H0.
 Defined.
+
+Instance open_PartialOrder `(top: Topology) : PartialOrder (open_type top) :=
+{
+}.
+intros.
+apply within_antisym.
+exact H.
+exact H0.
+Defined.
+
+
 
 Lemma feq : forall {A} {B} {p q:A} (f:A -> B), p = q -> f p = f q.
 intros.
@@ -146,100 +141,42 @@ rewrite H.
 trivial.
 Qed.
 
+
+Lemma val_open: forall {A:Type} `{Topology A} (v:set A) (st:open v), val (open_val v st) = v.
+intros.
+unfold open_val.
+apply val_stc.
+Qed.
+
+
 Instance open_Lattice `(top: Topology) : Lattice (open_type top) :=
 {
 }.
-unfold within. unfold open_PartialOrder.
-unfold within. unfold indexed_PartialOrder.
-unfold within. unfold prop_PartialOrder.
+intros.
+unfold within. unfold open_Preorder.
 unfold join. unfold open_JoinSemilattice.
-unfold topology_union.
-unfold open_val.
-unfold val.
-unfold join. unfold indexed_JoinSemilattice.
-unfold join. unfold prop_JoinSemilattice.
-intros.
-destruct p.
-destruct q.
-
-apply prop_ext.
-split.
+replace (topology_union p q = q) with (val (topology_union p q) = val q).
+unfold topology_union. rewrite val_open.
+apply join_within.
+apply set_type_ext_eq.
 
 intros.
-apply set_type_ext.
-unfold val.
-apply member_ext.
-intros.
-split.
-intro.
-destruct H0.
-apply (H x1).
-exact H0.
-exact H0.
-intro.
-right.
-exact H0.
-
-intro.
-pose proof (feq val H) as H1.
-clear H.
-unfold val in H1.
-rewrite <- H1.
-intros.
-left.
-exact H.
-
+unfold join. unfold open_JoinSemilattice.
 unfold meet. unfold open_MeetSemilattice.
-unfold join. unfold open_JoinSemilattice.
+apply set_type_ext.
 unfold topology_union.
 unfold topology_intersect.
-unfold open_val.
-unfold val.
-unfold join. unfold indexed_JoinSemilattice.
-unfold join. unfold prop_JoinSemilattice.
-unfold meet. unfold indexed_MeetSemilattice.
-unfold meet. unfold prop_MeetSemilattice.
-destruct p.
-destruct q.
-apply set_type_ext.
-unfold val.
-apply member_ext.
-intros.
-split.
-intro.
-destruct H.
-exact H.
-intro.
-split.
-exact H.
-left.
-exact H.
+rewrite !val_open.
+apply meet_join_absorbs.
 
-unfold meet. unfold open_MeetSemilattice.
+intros.
 unfold join. unfold open_JoinSemilattice.
+unfold meet. unfold open_MeetSemilattice.
+apply set_type_ext.
 unfold topology_union.
 unfold topology_intersect.
-unfold open_val.
-unfold val.
-unfold join. unfold indexed_JoinSemilattice.
-unfold join. unfold prop_JoinSemilattice.
-unfold meet. unfold indexed_MeetSemilattice.
-unfold meet. unfold prop_MeetSemilattice.
-destruct p.
-destruct q.
-apply set_type_ext.
-unfold val.
-apply member_ext.
-intros.
-split.
-intro.
-destruct H.
-exact H.
-destruct H.
-exact H.
-intro.
-left.
-exact H.
+rewrite !val_open.
+apply join_meet_absorbs.
 Defined.
 
 Definition topology_bottom {A} {t: Topology A}: open_type t.
@@ -262,25 +199,12 @@ Instance open_BoundedPartialOrder `(t: Topology) : BoundedPartialOrder (open_typ
   top := topology_top
 }.
 intros.
-unfold within. unfold open_PartialOrder.
-unfold within. unfold indexed_PartialOrder.
-unfold within. unfold prop_PartialOrder.
-unfold topology_bottom. unfold open_val. unfold val.
-case p.
-unfold bottom. unfold indexed_BoundedPartialOrder.
-unfold bottom. unfold prop_BoundedPartialOrder.
-intros.
-contradiction H.
+unfold within. unfold open_Preorder.
+apply bottom_within.
 
-unfold within. unfold open_PartialOrder.
-unfold within. unfold indexed_PartialOrder.
-unfold within. unfold prop_PartialOrder.
-unfold topology_top. unfold open_val. unfold val.
-destruct p.
-unfold top. unfold indexed_BoundedPartialOrder.
-unfold top. unfold prop_BoundedPartialOrder.
 intros.
-trivial.
+unfold within. unfold open_Preorder.
+apply top_without.
 Defined.
 
 
@@ -293,8 +217,8 @@ Instance open_BoundedLattice `(t: Topology) : BoundedLattice (open_type t) :=
 Definition topology_Join {A} {t: Topology A} (uu: set (open_type t)): open_type t.
 apply (open_val (Union (map val uu))).
 apply top_Union_is_open.
-unfold within. unfold indexed_PartialOrder.
-unfold within. unfold prop_PartialOrder.
+unfold within. unfold indexed_Preorder.
+unfold within. unfold prop_Preorder.
 unfold map.
 intros.
 destruct H.
@@ -303,47 +227,63 @@ rewrite <- H0.
 apply struct.
 Defined.
 
+Lemma Join_is_Union: forall {A} (f:set (set A)), Join f = Union f.
+intros.
+unfold Join. unfold indexed_SemicompleteBoundedLattice.
+unfold Join. unfold prop_SemicompleteBoundedLattice.
+unfold Union.
+apply member_ext.
+intros.
+unfold map.
+split.
+intros.
+destruct H.
+exists x0.
+destruct H.
+split.
+exact H.
+rewrite H0.
+trivial.
+intros.
+destruct H.
+destruct H.
+exists x0.
+split.
+exact H.
+apply prop_ext.
+firstorder.
+Qed.
+
 Instance open_SemicompleteBoundedLattice `(t: Topology) : SemicompleteBoundedLattice (open_type t) :=
 {
   Join := topology_Join
 }.
-unfold topology_Join.
-unfold within. unfold open_PartialOrder.
-unfold within. unfold indexed_PartialOrder.
-unfold within. unfold prop_PartialOrder.
-unfold open_val.
-unfold val.
-unfold map.
-destruct a.
 intros.
-unfold Union.
-exists x.
-split.
-exists (stc open x o).
-split.
-exact H.
-trivial.
-exact H0.
+unfold within. unfold open_Preorder.
+unfold topology_Join. rewrite val_open.
+rewrite <- Join_is_Union.
+apply Join_bound.
+unfold map.
+exists a.
+firstorder.
 
-unfold topology_Join.
-unfold within. unfold open_PartialOrder.
-unfold within. unfold indexed_PartialOrder.
-unfold within. unfold prop_PartialOrder.
-unfold open_val.
-unfold val.
-unfold map.
-unfold Union.
 intros.
-destruct p.
+unfold within. unfold open_Preorder.
+unfold topology_Join. rewrite val_open.
+unfold within in H. unfold open_Preorder in H.
+rewrite <- Join_is_Union.
+apply Join_least.
+intros.
+unfold map in H0.
 destruct H0.
 destruct H0.
-destruct H0.
-destruct H0.
-destruct x1.
-apply (H (stc open x1 o0) H0 i).
-rewrite H2.
-exact H1.
+rewrite <- H1.
+apply (H x).
+exact H0.
 Defined.
+
+
+
 (*
 Instance top_empty {A} {top: Topology A}: set_type open :=
 *)
