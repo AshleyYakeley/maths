@@ -19,6 +19,12 @@ Definition open_type {A} (top: Topology A) := set_type open.
 
 Definition open_val {A} {t: Topology A} (x: set A): open x -> open_type t := stc open x.
 
+Lemma val_open: forall {A:Type} `{Topology A} (v:set A) (st:open v), val (open_val v st) = v.
+intros.
+unfold open_val.
+apply val_stc.
+Qed.
+
 Definition topology_union {A} {top: Topology A} (u v: open_type top): open_type top.
 apply (open_val (join (val u) (val v))).
 case u.
@@ -41,7 +47,6 @@ apply o0.
 rewrite H.
 apply o.
 Defined.
-
 
 Instance open_JoinSemilattice `(top: Topology) : JoinSemilattice (open_type top) :=
 {
@@ -132,22 +137,6 @@ apply within_antisym.
 exact H.
 exact H0.
 Defined.
-
-
-
-Lemma feq : forall {A} {B} {p q:A} (f:A -> B), p = q -> f p = f q.
-intros.
-rewrite H.
-trivial.
-Qed.
-
-
-Lemma val_open: forall {A:Type} `{Topology A} (v:set A) (st:open v), val (open_val v st) = v.
-intros.
-unfold open_val.
-apply val_stc.
-Qed.
-
 
 Instance open_Lattice `(top: Topology) : Lattice (open_type top) :=
 {
