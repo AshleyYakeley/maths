@@ -1,3 +1,21 @@
+(* See http://math.andrej.com/2015/07/30/intermediate-truth-values/ *)
+Theorem no_intermediate: ~ exists p:Prop, ~ (p <-> True) /\ ~ (p <-> False).
+intro.
+destruct H.
+destruct H.
+apply H0. clear H0.
+split.
+intro.
+apply H.
+split.
+intro.
+trivial.
+intro.
+apply H0.
+intro.
+contradiction H0.
+Save.
+
 Require Import Ashley.Axioms.
 
 Class Judge (prop:Type) : Type :=
