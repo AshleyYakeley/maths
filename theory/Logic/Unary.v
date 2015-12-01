@@ -26,3 +26,7 @@ Instance Unary_HasFalse: HasFalse Unary :=
 }.
 firstorder.
 Defined.
+
+Lemma Unary_Inconsistent: ~ Consistent Unary.
+firstorder.
+Defined.

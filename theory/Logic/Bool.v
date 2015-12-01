@@ -55,3 +55,9 @@ Instance Bool_HasFalse: HasFalse bool :=
 }.
 firstorder.
 Defined.
+
+Instance Bool_Consistent: Consistent bool :=
+{
+}.
+firstorder.
+Defined.

@@ -75,3 +75,18 @@ unfold implies in H.
 unfold Ternary_Implication in H.
 firstorder.
 Qed. 
+
+Instance Ternary_HasFalse: HasFalse Ternary :=
+{
+  false:= False3
+}.
+firstorder.
+Defined.
+
+Instance Ternary_Consistent: Consistent Ternary :=
+{
+}.
+firstorder.
+Defined.
+
+

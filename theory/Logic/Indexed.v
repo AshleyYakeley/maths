@@ -61,3 +61,9 @@ unfold Logic.false.
 intros.
 apply (ex_falso (p i)).
 Defined.
+
+Instance indexed_Consistent (I:Type) (i:I) (A:Type) `{Consistent A}: Consistent (I -> A) :=
+{
+}.
+firstorder.
+Defined.

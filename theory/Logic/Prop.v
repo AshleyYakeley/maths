@@ -24,3 +24,9 @@ Instance Prop_HasFalse: HasFalse Prop :=
 }.
 firstorder.
 Defined.
+
+Instance Prop_Consistent: Consistent Prop :=
+{
+}.
+firstorder.
+Defined.

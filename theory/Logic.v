@@ -44,6 +44,11 @@ Class HasFalse (prop:Type) `{Implication prop} : Type :=
 
 Definition notL {prop} `{HasFalse prop} (p:prop) : prop := implies p false.
 
+Class Consistent (prop:Type) `{HasFalse prop} : Type :=
+{
+  consistent: ~ judge false
+}.
+
 Require Import Ashley.Category.
 
 Instance Logic_Category (prop:Type) `{Implication prop}: Category prop :=
