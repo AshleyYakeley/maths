@@ -9,6 +9,9 @@ build:
 	coqc -I `pwd` -R theory Ashley theory/Logic/Prop.v
 	coqc -I `pwd` -R theory Ashley theory/Logic/Unary.v
 	coqc -I `pwd` -R theory Ashley theory/Logic/Ternary.v
+	coqc -I `pwd` -R theory Ashley theory/Logic/Indexed.v
+	coqc -I `pwd` -R theory Ashley theory/Logic/Modal.v
+	coqc -I `pwd` -R theory Ashley theory/Logic/Worlds.v
 	coqc -I `pwd` -R theory Ashley theory/PartialOrder.v
 	coqc -I `pwd` -R theory Ashley theory/Set.v
 	coqc -I `pwd` -R theory Ashley theory/Lattice.v

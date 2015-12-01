@@ -17,8 +17,12 @@ Instance Unary_Implication: Implication Unary :=
 firstorder.
 firstorder.
 firstorder.
+firstorder.
 Defined.
 
-Lemma not_Unary_HasFalse: ~ HasFalse Unary.
+Instance Unary_HasFalse: HasFalse Unary :=
+{
+  false := True1
+}.
 firstorder.
-Qed.
+Defined.

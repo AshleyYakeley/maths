@@ -15,6 +15,7 @@ Instance Prop_Implication : Implication Prop :=
 firstorder.
 firstorder.
 firstorder.
+firstorder.
 Defined.
 
 Instance Prop_HasFalse: HasFalse Prop :=

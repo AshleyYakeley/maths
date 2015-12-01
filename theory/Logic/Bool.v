@@ -22,6 +22,17 @@ firstorder.
 destruct p.
 firstorder.
 firstorder.
+
+unfold judge.
+unfold Bool_Judge.
+destruct p.
+destruct q.
+firstorder.
+firstorder.
+destruct q.
+firstorder.
+firstorder.
+
 firstorder.
 unfold judge.
 unfold Bool_Judge.

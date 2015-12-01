@@ -32,6 +32,21 @@ destruct p.
 firstorder.
 firstorder.
 firstorder.
+
+destruct p.
+destruct q.
+firstorder.
+firstorder.
+firstorder.
+destruct q.
+firstorder.
+firstorder.
+firstorder.
+destruct q.
+firstorder.
+firstorder.
+firstorder.
+
 destruct p.
 firstorder.
 firstorder.
