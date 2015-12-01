@@ -3,7 +3,7 @@ Require Import Ashley.Logic.Indexed.
 Require Import Ashley.Logic.Modal.
 Require Import Ashley.Logic.Prop.
 
-Instance Worlds_Modal (I:Type): Modal (I -> Prop) :=
+Instance Worlds_ModalK (I:Type): ModalK (I -> Prop) :=
 {
   necessarily s i := forall (j:I), judge (s j)
 }.
@@ -33,7 +33,7 @@ Require Import Ashley.Logic.Bool.
 Lemma bool_Worlds_Robust: ~ modal_collapse (bool -> Prop).
 unfold modal_collapse.
 unfold necessarily.
-unfold Worlds_Modal.
+unfold Worlds_ModalK.
 unfold implies.
 unfold indexed_Implication.
 unfold implies.
