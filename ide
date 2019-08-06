@@ -1,3 +1,0 @@
-#!/bin/sh
-coqide -I `pwd` -R theory Ashley &
-
