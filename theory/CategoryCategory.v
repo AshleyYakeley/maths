@@ -1,11 +1,25 @@
 Require Import Ashley.Axioms.
 Require Import Ashley.Category.
+Require Import Ashley.SetFunction.
 
-Record AnyCategory: Type := MkAnyCategory
+
+
+
+
+
+Instance Category_Category: Category (set_type Category) :=
 {
-  acObj: Type;
-  acCat: Category acObj
+  hom cat1 cat2 := Functor (struct cat1) (struct cat2);
+  id cat := identity_functor (struct cat);
+  compose c1 c2 c3 := compose_functor
 }.
+intros.
+
+unfold compose_functor.
+f_equal.
+
+
+
 
 Definition mapHomOff `(f: Functor) := @mapHom _ _ _ _ f.
 
@@ -30,20 +44,3 @@ f_equal.
 
 Lemma functor_equal: forall `(A: Category) `(B: Category) (f1: Functor A B) (f2: Functor A B),
     (mapObjOf f1 = mapObjOf f2) -> (forall (o1: objOf A) (o2: objOf A) (m : homOf A o1 o2), mapHomOf1 A B f1 o1 o2 m = mapHomOf1 A B f2 o1 o2 m) -> f1 = f2.
-
-
-Instance category_category : Category AnyCategory :=
-{
-  hom A B := Functor (acCat A) (acCat B);
-  id A := identity_functor (acCat A);
-  compose A B C mbc mab := compose_functor mbc mab
-}.
-intros.
-unfold compose_functor.
-f_equal.
-
-
-
-
-
-
